@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -26,9 +27,10 @@ public class Dao {
 
         //TABLE 생성
         try {
-            String sql1 = "CREATE TABLE IF NOT EXISTS ItemList (ItemName text not null,"
-                    + "                                          ItemStock text not null,"
-                    + "                                          ImgName text not null);";
+            String sql1 = "CREATE TABLE IF NOT EXISTS ItemList (ItemNumber integer UNIQUE not null,"
+                    + "                                         ItemName text not null,"
+                    + "                                         ItemStock text not null,"
+                    + "                                         ImgName text not null);";
             database.execSQL(sql1);
         } catch (Exception e) {
             Log.e("test", "CREATE TABLE FAILED! -" + e);
@@ -38,9 +40,12 @@ public class Dao {
 
     public void insertJsonData(String jsonData) {
         //JSON 데이터를 인자로 받아올 때 사용할 임시 변수
+        int itemNumber;
         String itemName;
         String itemStock;
         String imgName;
+
+        FileDownloader fileDownloader = new FileDownloader(context);
 
         try {
             JSONArray jArr = new JSONArray(jsonData);
@@ -48,24 +53,25 @@ public class Dao {
             for (int i = 0; i < jArr.length(); ++i) {
                 JSONObject jObj = jArr.getJSONObject(i);
 
+                itemNumber = jObj.getInt("ItemNumber");
                 itemName = jObj.getString("ItemName");
                 itemStock = jObj.getString("ItemStock");
                 imgName = jObj.getString("ImgName");
 
                 Log.i("test", "ItemName: " + itemName + "ItemStock: " + itemStock);
 
-                String sql1 = "INSERT INTO ItemList(ItemName, ItemStock, ImgName)"
-                        + " VALUES(" + itemName + ",'" + itemStock + ".'" + imgName + ".);";
+                String sql1 = "INSERT INTO ItemList(ItemNumber, ItemName, ItemStock, ImgName)"
+                        + " VALUES("+ itemNumber + ",'" + itemName + "','" + itemStock + "','" + imgName + "');";
 
                 try {
                     database.execSQL(sql1);
                 } catch (Exception e) {
-                    Log.e("test", "DB ERROR ! - " + e);
                     e.printStackTrace();
                 }
+                fileDownloader.downFile("http://10.53.128.152:5050/image/" + imgName, imgName);
             }
 
-        } catch (Exception e) {
+        } catch (JSONException e) {
             Log.e("test", "JSON ERROR! -" + e);
             e.printStackTrace();
         }
@@ -74,6 +80,9 @@ public class Dao {
 
     public ArrayList<Item> getItemList(){
 
+        ArrayList<Item> itemList = new ArrayList<>();
+
+        int itemNumber;
         String itemName;
         String itemStock;
         String imgName;
@@ -82,42 +91,13 @@ public class Dao {
         Cursor cursor = database.rawQuery(sql1, null);
 
         while (cursor.moveToNext()){
-            itemName = cursor.getString(0);
-            itemStock = cursor.getString(1);
-            imgName = cursor.getString(2);
+            itemNumber = cursor.getInt(0);
+            itemName = cursor.getString(1);
+            itemStock = cursor.getString(2);
+            imgName = cursor.getString(3);
+            itemList.add(new Item(itemNumber, itemName,itemStock,imgName));
         }
-        return null;
-    }
-
-
-    /**
-     * JSON파싱을 위한 테스트 문자열입니다.
-     */
-    public String getJsonTestData() {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("");
-
-        sb.append("[");
-
-        sb.append("      {");
-        sb.append("         'ItemName':'Cola',");
-        sb.append("         'ItemStock':'3개',");
-        sb.append("         'ImgName':'img01.jpg'");
-        sb.append("      },");
-        sb.append("      {");
-        sb.append("         'ItemName':'Chicken',");
-        sb.append("         'ItemStock':'5개',");
-        sb.append("         'ImgName':'img02.jpg'");
-        sb.append("      },");
-        sb.append("      {");
-        sb.append("         'ItemName':'Sprite',");
-        sb.append("         'ItemStock':'10개',");
-        sb.append("         'ImgName':'img03.jpg'");
-        sb.append("      }");
-
-        sb.append("]");
-
-        return sb.toString();
+        cursor.close();
+        return itemList;
     }
 }

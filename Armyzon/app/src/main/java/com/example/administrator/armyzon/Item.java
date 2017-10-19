@@ -5,14 +5,22 @@ package com.example.administrator.armyzon;
  */
 
 public class Item {
-    String itemName;
-    String itemStock;
-    String imgName;
+    private int itemNumber;
+    private String itemName;
+    private String itemStock;
+    private String imgName;
 
-    public Item(String itemName, String itemStock, String imgName){
+
+    public Item(int itemNumber, String itemName, String itemStock, String imgName){
+        this.itemNumber = itemNumber;
+
         this.itemName = itemName;
         this.itemStock = itemStock;
         this.imgName = imgName;
+    }
+
+    public int getItemNumber() {
+        return itemNumber;
     }
 
     public String getItemName() {
