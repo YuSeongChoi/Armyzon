@@ -1,0 +1,85 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@android:color/holo_green_dark"
+        android:fontFamily="serif"
+        android:gravity="center"
+        android:text="Armyzon"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@android:color/holo_green_light"
+        android:textSize="24sp"
+        android:textStyle="bold|italic" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@android:color/holo_green_dark"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/main_currentItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_green_light"
+                android:text="Current item"
+                android:textColor="@android:color/holo_green_dark" />
+
+            <Button
+                android:id="@+id/main_checkItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_green_light"
+                android:text="check item"
+                android:textColor="@android:color/holo_green_dark" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/main_orderItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_green_light"
+                android:text="order item"
+                android:textColor="@android:color/holo_green_dark" />
+
+            <Button
+                android:id="@+id/main_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:layout_weight="1"
+                android:background="@android:color/holo_green_light"
+                android:text="notice"
+                android:textColor="@android:color/holo_green_dark" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
